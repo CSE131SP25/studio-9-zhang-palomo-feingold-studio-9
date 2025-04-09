@@ -10,8 +10,10 @@ public class Polynomial {
 	 * Constructs a Polynomial with no terms yet.
 	 */
 	public Polynomial() {
-		//FIXME
+		list = new LinkedList<Double>();
 	}
+	
+	
 
 	
 	/**
@@ -20,7 +22,7 @@ public class Polynomial {
 	 * @return polynomial with added term
 	 */
 	public void addTerm(double coeff) {
-		//FIXME
+		list.add(coeff);
 	}
 	
 	/*
@@ -29,7 +31,46 @@ public class Polynomial {
 	 * Cx^N + Cx^N-1 + ... + Cx + C
 	 */
 	public String toString() {
-		return ""; //FIXME
+		if(list.isEmpty()) {
+			return "0";
+		}
+		StringBuilder sb = new StringBuilder();
+		int power = list.size() - 1;
+        
+        for (int i = 0; i < list.size(); i++) {
+            double coeff = list.get(i);
+            
+            if (coeff == 0 && power != 0 && list.size() > 1) {
+                power--;
+                continue;
+            }
+            
+            if (i != 0 && coeff > 0) {
+                sb.append(" + ");
+            } else if (coeff < 0) {
+                sb.append(" - ");
+                coeff = -coeff;
+            }
+            
+            if (coeff != 1 || power == 0) {
+                if (coeff == (int)coeff) {
+                    sb.append((int)coeff);
+                } else {
+                    sb.append(coeff);
+                }
+            }
+            
+            if (power > 0) {
+                sb.append("x");
+                if (power > 1) {
+                    sb.append("^").append(power);
+                }
+            }
+            
+            power--;
+        }
+        
+        return sb.toString();
 	}
 	
 	/**
@@ -38,12 +79,25 @@ public class Polynomial {
 	 * @return value of polynomial at that x
 	 */
 	public double evaluate(double x) {
-		return 0;//FIXME
+		double result = 0;
+		int power = list.size() - 1;
+		for(double coeff : list) {
+			result += coeff * Math.pow(x, power);
+			power--;
+		}
+		return result;
 	}
 
 	
 	public Polynomial derivative() {
-		return null;//FIXME
+		Polynomial deriv = new Polynomial();
+		int power = list.size() - 1;
+		for(int i = 0; i < list.size()-1; i++) {
+			double coeff = list.get(i);
+			deriv.addTerm(coeff*power);
+			power--;
+		}
+		return deriv;
 	}
 	
 
